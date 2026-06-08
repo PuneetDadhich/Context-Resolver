@@ -1,0 +1,28 @@
+{
+  "name": "context-resolver",
+  "version": "1.0.0",
+  "description": "> **Seamlessly continue AI conversations across tools when you hit context window limits.**",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PuneetDadhich/Context-Resolver.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/PuneetDadhich/Context-Resolver/issues"
+  },
+  "homepage": "https://github.com/PuneetDadhich/Context-Resolver#readme",
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "jsdom": "^21.1.2"
+  }
+}

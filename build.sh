@@ -14,16 +14,21 @@ echo "🏗️  Building Context Resolver v${VERSION}..."
 rm -f "${OUTPUT_FILE}"
 
 # Create zip with only extension files
-zip -r "${OUTPUT_FILE}" \
-  manifest.json \
-  icons/ \
-  background/ \
-  sidepanel/ \
-  content-scripts/ \
-  lib/ \
-  styles/ \
+zip -r "${OUTPUT_FILE}" . \
+  -x "*.git*" \
   -x "*.DS_Store" \
-  -x "*/.DS_Store"
+  -x "store-assets/*" \
+  -x "build.sh" \
+  -x "README.md" \
+  -x "PRIVACY.md" \
+  -x "STORE_LISTING.md" \
+  -x "LICENSE" \
+  -x ".gitignore" \
+  -x "context-resolver-*.zip" \
+  -x "tests/*" \
+  -x "package.json" \
+  -x "package-lock.json" \
+  -x "node_modules/*"
 
 # Report
 SIZE=$(du -h "${OUTPUT_FILE}" | cut -f1)
