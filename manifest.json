@@ -1,0 +1,84 @@
+{
+  "manifest_version": 3,
+  "name": "Context Resolver",
+  "version": "1.0.0",
+  "description": "Seamlessly continue AI conversations across tools. Capture context from one AI chat and inject it into another when you hit token limits.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://www.perplexity.ai/*",
+    "https://perplexity.ai/*",
+    "https://chat.deepseek.com/*",
+    "https://grok.com/*",
+    "https://x.com/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://www.perplexity.ai/*",
+        "https://perplexity.ai/*",
+        "https://chat.deepseek.com/*",
+        "https://grok.com/*",
+        "https://x.com/i/grok*"
+      ],
+      "js": [
+        "lib/utils.js",
+        "lib/compressor.js",
+        "lib/template.js",
+        "content-scripts/adapters/base-adapter.js",
+        "content-scripts/adapters/chatgpt-adapter.js",
+        "content-scripts/adapters/claude-adapter.js",
+        "content-scripts/adapters/gemini-adapter.js",
+        "content-scripts/adapters/perplexity-adapter.js",
+        "content-scripts/adapters/deepseek-adapter.js",
+        "content-scripts/adapters/grok-adapter.js",
+        "content-scripts/platform-detector.js",
+        "content-scripts/injector.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Context Resolver"
+  },
+  "commands": {
+    "capture-context": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C",
+        "mac": "Command+Shift+C"
+      },
+      "description": "Capture conversation context"
+    },
+    "inject-context": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+V",
+        "mac": "Command+Shift+V"
+      },
+      "description": "Inject context into current chat"
+    }
+  }
+}

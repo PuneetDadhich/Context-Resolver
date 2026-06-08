@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Context Resolver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/design-tokens.css">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- ─── Header ──────────────────────────────────── -->
+    <header class="header" id="header">
+      <div class="header-brand">
+        <div class="header-logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="header-title">Context Resolver</h1>
+          <p class="header-subtitle" id="platformStatus">Detecting platform…</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── Main Action Bar ─────────────────────────── -->
+    <div class="action-bar" id="actionBar">
+      <button class="btn btn-capture" id="captureBtn" title="Capture context from current tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>Capture Context</span>
+      </button>
+      <div class="action-bar-meta" id="actionBarMeta">
+        <span class="badge" id="contextCount">0 saved</span>
+        <span class="badge" id="storageUsage">0 B</span>
+      </div>
+    </div>
+
+    <!-- ─── Toast Notifications ─────────────────────── -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ─── Views Container ─────────────────────────── -->
+    <main class="main" id="mainContent">
+
+      <!-- ─── Context Library View ──────────────────── -->
+      <section class="view view-active" id="viewLibrary">
+        <div class="search-bar">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search contexts…" aria-label="Search contexts">
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="empty-state-title">No contexts saved yet</h3>
+          <p class="empty-state-text">Navigate to an AI chat tool and click <strong>Capture Context</strong> to save your conversation.</p>
+          <div class="empty-state-platforms">
+            <span class="platform-chip" data-platform="chatgpt">🤖 ChatGPT</span>
+            <span class="platform-chip" data-platform="claude">🟠 Claude</span>
+            <span class="platform-chip" data-platform="gemini">✨ Gemini</span>
+            <span class="platform-chip" data-platform="perplexity">🔍 Perplexity</span>
+            <span class="platform-chip" data-platform="deepseek">🐋 DeepSeek</span>
+            <span class="platform-chip" data-platform="grok">⚡ Grok</span>
+          </div>
+        </div>
+
+        <!-- Context Cards List -->
+        <div class="context-list" id="contextList"></div>
+      </section>
+
+      <!-- ─── Context Detail View ───────────────────── -->
+      <section class="view" id="viewDetail">
+        <div class="detail-header">
+          <button class="btn-back" id="backBtn" title="Back to library">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Library</span>
+          </button>
+          <div class="detail-actions">
+            <button class="icon-btn icon-btn-danger" id="deleteContextBtn" title="Delete context">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="detail-content" id="detailContent">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Inject Controls -->
+        <div class="inject-bar" id="injectBar">
+          <div class="inject-compression">
+            <label class="inject-label">Compression:</label>
+            <div class="compression-toggle" id="compressionToggle">
+              <button class="compression-opt" data-level="full" title="Full conversation, no compression">Full</button>
+              <button class="compression-opt active" data-level="summary" title="Summarized with code and decisions preserved">Summary</button>
+              <button class="compression-opt" data-level="key-points" title="Only key decisions, requirements, and code">Key Points</button>
+            </div>
+          </div>
+          <button class="btn btn-inject" id="injectBtn" title="Inject context into current tab's AI chat">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 3v4a2 2 0 01-2 2H5a2 2 0 00-2 2v4"/>
+              <polyline points="7 17 12 22 17 17"/>
+              <line x1="12" y1="12" x2="12" y2="22"/>
+            </svg>
+            <span>Inject into Current Chat</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ─── Settings View ─────────────────────────── -->
+      <section class="view" id="viewSettings">
+        <div class="detail-header">
+          <button class="btn-back" id="settingsBackBtn" title="Back to library">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Library</span>
+          </button>
+        </div>
+
+        <div class="settings-content">
+          <h2 class="settings-title">Settings</h2>
+
+          <div class="setting-group">
+            <label class="setting-label">Default Compression Level</label>
+            <select class="setting-select" id="settingCompression">
+              <option value="full">Full (no compression)</option>
+              <option value="summary" selected>Summary (recommended)</option>
+              <option value="key-points">Key Points (most compressed)</option>
+            </select>
+          </div>
+
+          <div class="setting-group">
+            <label class="setting-label">Max Saved Contexts</label>
+            <select class="setting-select" id="settingMaxContexts">
+              <option value="20">20</option>
+              <option value="50" selected>50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+            </select>
+          </div>
+
+          <div class="setting-divider"></div>
+
+          <div class="setting-group">
+            <label class="setting-label">Data Management</label>
+            <div class="setting-buttons">
+              <button class="btn btn-secondary" id="exportBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Export All
+              </button>
+              <button class="btn btn-secondary" id="importBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Import
+              </button>
+              <input type="file" id="importFileInput" accept=".json" hidden>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <button class="btn btn-danger" id="clearAllBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+              </svg>
+              Clear All Contexts
+            </button>
+          </div>
+
+          <div class="setting-divider"></div>
+
+          <div class="setting-group">
+            <label class="setting-label">Keyboard Shortcuts</label>
+            <div class="shortcuts-list">
+              <div class="shortcut-item">
+                <span class="shortcut-desc">Capture context</span>
+                <kbd class="shortcut-key">⌘⇧C</kbd>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-desc">Inject context</span>
+                <kbd class="shortcut-key">⌘⇧V</kbd>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-footer">
+            <p class="setting-footer-text">Context Resolver v1.0.0</p>
+            <p class="setting-footer-text">All data stored locally. No external servers.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../lib/utils.js"></script>
+  <script src="../lib/storage.js"></script>
+  <script src="../lib/compressor.js"></script>
+  <script src="../lib/template.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

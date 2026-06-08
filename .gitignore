@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build output
+*.zip
+dist/
+
+# Store assets (not included in extension package)
+store-assets/
+
+# Documentation (not included in extension package)
+STORE_LISTING.md
