@@ -93,17 +93,26 @@ Backup your entire context library to JSON and import it on another machine.
 
 ## Installation
 
-### From Source (Developer Mode)
+### Method 1: Download from GitHub Releases (Recommended)
 
-1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable **Developer mode** (toggle in top-right corner)
-4. Click **Load unpacked**
-5. Select the `Context Resolver` folder
-6. The extension icon will appear in your toolbar
+This is the easiest way to install the extension for free:
 
-### From Chrome Web Store
-*Coming soon*
+1. Go to the [Releases page](https://github.com/PuneetDadhich/Context-Resolver/releases) of this repository.
+2. Download the latest `context-resolver-vX.X.X.zip` file from the **Assets** section.
+3. Extract the `.zip` file into a folder on your computer.
+4. Open Google Chrome and navigate to `chrome://extensions/`.
+5. Enable **Developer mode** (the toggle in the top-right corner).
+6. Click the **Load unpacked** button in the top-left corner.
+7. Select the folder you extracted in Step 3.
+8. 📌 **Tip:** Click the puzzle piece icon in Chrome's toolbar and pin Context Resolver so the side panel is always accessible!
+
+### Method 2: Build From Source (For Developers)
+
+1. Clone this repository: `git clone https://github.com/PuneetDadhich/Context-Resolver.git`
+2. Navigate to the project directory.
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable **Developer mode** and click **Load unpacked**
+5. Select the cloned repository folder.
 
 ---
 
